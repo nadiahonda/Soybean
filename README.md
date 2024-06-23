@@ -7,6 +7,7 @@ This project is a Streamlit application for analyzing continuous soybean contrac
 - **data/**: Contains the parquet files with OHLCV data.
 - **scripts/**: Contains scripts for data updating and extraction.
 - **app/**: Contains the main components of the Streamlit application.
+- **tvdatafeed_lib**: Contains a copy of the TvDataFeed library, which is currently offline.
 - **requirements.txt**: Project dependency list.
 - **README.md**: Project documentation.
 
