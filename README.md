@@ -1,29 +1,29 @@
 # Soybean Data Analysis
 
-Este projeto é um aplicativo Streamlit para análise de dados de contratos contínuos de soja (ZS, ZL, ZM). Ele permite a atualização dos dados e a visualização de gráficos interativos.
+This project is a Streamlit application for analyzing continuous soybean contract data (ZS, ZL, ZM). It allows for data updates and interactive chart visualizations.
 
-## Estrutura do Projeto
+## Project Structure
 
-- **data/**: Contém os arquivos parquet com os dados OHLCV.
-- **scripts/**: Contém scripts para atualização e extração de dados.
-- **app/**: Contém os componentes principais do aplicativo Streamlit.
-- **requirements.txt**: Lista de dependências do projeto.
-- **README.md**: Documentação do projeto.
+- **data/**: Contains the parquet files with OHLCV data.
+- **scripts/**: Contains scripts for data updating and extraction.
+- **app/**: Contains the main components of the Streamlit application.
+- **requirements.txt**: Project dependency list.
+- **README.md**: Project documentation.
 
-## Como Executar
+## How to Run
 
-1. Instale as dependências:
+1. Install the dependencies:
     ```bash
     pip install -r requirements.txt
     ```
 
-2. Execute o aplicativo Streamlit:
+2. Run the Streamlit application:
     ```bash
     streamlit run app/main.py
     ```
 
-## Funcionalidades
+## Features
 
-- Atualização de dados OHLCV e relatórios COT.
-- Visualização de gráficos interativos com Plotly.
-- Filtro de intervalo de tempo através de um slider na barra lateral.
+- OHLCV data and COT reports updating.
+- Interactive chart visualization with Plotly.
+- Time range filter via a sidebar slider.
