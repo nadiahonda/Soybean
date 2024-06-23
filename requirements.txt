@@ -1,0 +1,4 @@
+streamlit==1.36.0
+pandas==2.2.0
+plotly==5.18.0
+cot_reports==0.1.3
