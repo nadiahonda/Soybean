@@ -14,15 +14,68 @@ pio.orca.config.use_xvfb = True
 # Set page configuration to wide mode
 st.set_page_config(layout="wide")
 
-# CSS para esconder o cabeçalho e o rodapé do Streamlit
-hide_streamlit_style = """
+# Adicionar estilo CSS para definir o fundo da página, do cabeçalho e reduzir espaços no topo
+st.markdown(
+    """
     <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    .main {
+        background-color: #181c27;
+        color: #b2b5be;
+    }
+    .sidebar .sidebar-content {
+        background-color: #181c27;
+        color: #b2b5be;
+    }
+    /* Estilo para o cabeçalho */
+    .css-18ni7ap.e8zbici2 {
+        background-color: #181c27;
+        color: #b2b5be;
+    }
+    .css-1v3fvcr.e8zbici0 {
+        color: #b2b5be;
+    }
+    /* Ajustar a largura dos dropdowns */
+    .stSelectbox > div > div {
+        width: 100% !important;
+    }
+    /* Centralizar as legendas com os dropdowns */
+    .legend-header {
+        text-align: center;
+        width: 100%;
+        display: inline-block;
+    }
+    /* Ajustar a largura das colunas */
+    .stColumn > div {
+        display: flex;
+        justify-content: center;
+    }
+    /* Estilo para o botão de atualização */
+    .full-width-button > button {
+        width: 100%;
+    }
+    /* Remover cabeçalho e rodapé */
+    header, footer {
+        visibility: hidden;
+    }
+    /* Reduzir o tamanho do menu e do título */
+    .css-1v3fvcr.e8zbici0 {
+        font-size: 14px;  /* Tamanho do texto do menu */
+    }
+    .css-1v3fvcr.e8zbici0 > div {
+        font-size: 16px;  /* Tamanho do título do menu */
+    }
+    .css-1v3fvcr.e8zbici0 > div > svg {
+        width: 20px;  /* Tamanho dos ícones do menu */
+        height: 20px;
+    }
+    /* Ocultar o texto "Menu" */
+    .css-1v3fvcr.e8zbici0 > div:first-child {
+        display: none;
+    }
     </style>
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 # Definir o template personalizado
 custom_template = {
