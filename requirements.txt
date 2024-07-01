@@ -1,6 +1,6 @@
 streamlit==1.36.0
+streamlit-option-menu==0.3.13
 pandas==2.2.0
 plotly==5.18.0
 cot_reports==0.1.3
-requests==2.31.0
-websocket-client==1.7.0
+lightweight-charts==1.0.19
