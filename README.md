@@ -26,5 +26,5 @@ This project is a Streamlit application for analyzing continuous soybean contrac
 ## Features
 
 - OHLCV data and COT reports updating.
-- Interactive chart visualization with Plotly.
+- Interactive chart visualization with Plotly and Lightweight Charts
 - Time range filter via a sidebar slider.
