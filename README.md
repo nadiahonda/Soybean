@@ -20,7 +20,7 @@ This project is a Streamlit application for analyzing continuous soybean contrac
 
 2. Run the Streamlit application:
     ```bash
-    streamlit run app/main.py
+    streamlit run app.py
     ```
 
 ## Features
