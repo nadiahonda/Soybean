@@ -16,7 +16,7 @@ custom_template = {
             'yanchor': "top",
             'y': 1.10,
             'xanchor': "left",
-            'x': 0.89
+            'x': 0.85  # Mover a legenda um pouco para a esquerda
         },
         'hovermode': 'x',
         'spikedistance': -1,
@@ -158,3 +158,8 @@ def create_cot_figure(df_COT):
     fig.update_xaxes(zerolinecolor='#9598a1', gridcolor='#2a2e39')
 
     return fig
+
+if __name__ == "__main__":
+    df_COT = load_data()
+    fig = create_cot_figure(df_COT)
+    fig.show()
