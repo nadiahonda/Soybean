@@ -4,6 +4,9 @@ import plotly.io as pio
 from scripts.update_data import update_ohlcv_data, update_cot_reports
 from scripts.chart_COT import create_cot_figure, load_data
 from scripts.chart_calc import create_crush_spread_oil_share_figure
+from scripts.chart_lightweight import lightweight_chart_page
+from streamlit_option_menu import option_menu
+from lightweight_charts.widgets import StreamlitChart
 
 # Forçar o Plotly a usar o motor de serialização padrão do Python
 pio.orca.config.use_xvfb = True
@@ -11,49 +14,59 @@ pio.orca.config.use_xvfb = True
 # Set page configuration to wide mode
 st.set_page_config(layout="wide")
 
-# Adicionar estilo CSS para definir o fundo da página, do cabeçalho e reduzir espaços no topo
-st.markdown(
-    """
+# CSS para esconder o cabeçalho e o rodapé do Streamlit
+hide_streamlit_style = """
     <style>
-    .main {
-        background-color: #181c27;
-        color: #b2b5be;
-    }
-    .sidebar .sidebar-content {
-        background-color: #181c27;
-        color: #b2b5be;
-    }
-    /* Estilo para o cabeçalho */
-    .css-18ni7ap.e8zbici2 {
-        background-color: #181c27;
-        color: #b2b5be;
-    }
-    .css-1v3fvcr.e8zbici0 {
-        color: #b2b5be;
-    }
-    /* Ajustar a largura dos dropdowns */
-    .stSelectbox > div > div {
-        width: 100% !important;
-    }
-    /* Centralizar as legendas com os dropdowns */
-    .legend-header {
-        text-align: center;
-        width: 100%;
-        display: inline-block;
-    }
-    /* Ajustar a largura das colunas */
-    .stColumn > div {
-        display: flex;
-        justify-content: center;
-    }
-    /* Estilo para o botão de atualização */
-    .full-width-button > button {
-        width: 100%;
-    }
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
     </style>
-    """,
-    unsafe_allow_html=True
-)
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+# Definir o template personalizado
+custom_template = {
+    'layout': {
+        'template': 'plotly_white',
+        'paper_bgcolor': '#181c27',
+        'plot_bgcolor': '#181c27',
+        'font': {'color': '#b2b5be'},
+        'legend': {
+            'orientation': "v",
+            'yanchor': "top",
+            'y': 1.10,
+            'xanchor': "left",
+            'x': 0.82  # Mover a legenda um pouco para a esquerda
+        },
+        'hovermode': 'x',
+        'spikedistance': -1,
+        'xaxis': {
+            'showspikes': True,
+            'spikecolor': "#b2b5be",
+            'spikemode': "across",
+            'spikesnap': "cursor",
+            'showline': False,
+            'gridcolor': '#2a2e39',
+            'zerolinecolor': '#9598a1',
+            'spikethickness': 1,
+            'zerolinewidth': 0.5
+        },
+        'yaxis': {
+            'showspikes': True,
+            'spikecolor': "#b2b5be",
+            'spikemode': "across",
+            'spikesnap': "cursor",
+            'showline': True,
+            'gridcolor': '#2a2e39',
+            'zerolinecolor': '#9598a1',
+            'spikethickness': 1,
+            'zerolinewidth': 0.5
+        }
+    }
+}
+
+# Registrar o template personalizado
+pio.templates['custom_template'] = custom_template
 
 def load_ohlcv_data():
     # Function to load data from parquet files
@@ -90,11 +103,25 @@ def checklist():
 
     return df
 
-def main():
+def render_sidebar():
+    # Menu de navegação usando streamlit-option-menu
+    with st.sidebar:
+        page = option_menu(
+            "",
+            ["Home", "OHLCV"],
+            icons=["house", "bar-chart"],
+            menu_icon="cast",
+            default_index=0,
+            styles={
+                "container": {"padding": "5px", "background-color": "#181c27"},
+                "icon": {"color": "#b2b5be", "font-size": "20px"},  # Reduzir o tamanho do ícone
+                "nav-link": {"font-size": "14px", "text-align": "left", "margin": "0px", "--hover-color": "#2a2e39"},  # Reduzir o tamanho do texto
+                "nav-link-selected": {"background-color": "#2a2e39"},
+            }
+        )
     
-    # Sidebar
     st.sidebar.header("Inputs")
-    year_range = st.sidebar.slider("Select Year Range", min_value=2013, max_value=2024, value=(2018, 2024))
+    year_range = st.sidebar.slider("Select Year Range", min_value=2013, max_value=2024, value=(2021, 2024))
     start_year, end_year = year_range
     
     # Adicionar espaço antes do botão
@@ -123,6 +150,9 @@ def main():
             zs_data, zl_data, zm_data = load_ohlcv_data()
             cot_data = load_data()
     
+    return page, start_year, end_year, zs_data, zl_data, zm_data, cot_data
+
+def home(start_year, end_year, zs_data, zl_data, zm_data, cot_data):
     # Convert index to datetime if not already
     zs_data.index = pd.to_datetime(zs_data.index)
     zl_data.index = pd.to_datetime(zl_data.index)
@@ -149,5 +179,32 @@ def main():
         # Adicionar espaço vertical reduzido entre o gráfico e a checklist
         st.markdown("<div style='margin-top: -20px;'></div>", unsafe_allow_html=True)
 
+def main():
+    # Renderizar a barra lateral
+    page, start_year, end_year, zs_data, zl_data, zm_data, cot_data = render_sidebar()
+
+    if page == "Home":
+        home(start_year, end_year, zs_data, zl_data, zm_data, cot_data)
+    elif page == "OHLCV":
+        # Adicionar selectbox para selecionar o símbolo
+        symbol = st.radio("Select:", options=["ZS", "ZL", "ZM"],horizontal=True, label_visibility='collapsed')
+
+        # Selecionar os dados de acordo com o símbolo escolhido
+        if symbol == "ZS":
+            selected_data = zs_data
+        elif symbol == "ZL":
+            selected_data = zl_data
+        elif symbol == "ZM":
+            selected_data = zm_data
+
+        # Filtrar os dados pelo intervalo de tempo selecionado
+        cot_data2 = cot_data.reindex(selected_data.index, method='ffill')
+        selected_data = selected_data[(selected_data.index.year >= start_year) & (selected_data.index.year <= end_year)]
+        cot_data2 = cot_data2[(cot_data2.index.year >= start_year) & (cot_data2.index.year <= end_year)]
+
+        # Chamar a função lightweight_chart_page com os dados filtrados
+        lightweight_chart_page(selected_data, cot_data2, symbol=symbol)
+
+# Exemplo de uso
 if __name__ == "__main__":
     main()
