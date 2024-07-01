@@ -15,7 +15,7 @@ custom_template = {
             'yanchor': "top",
             'y': 1.10,
             'xanchor': "left",
-            'x': 0.89
+            'x': 0.85  # Mover a legenda um pouco para a esquerda
         },
         'hovermode': 'x',
         'spikedistance': -1,
@@ -139,3 +139,12 @@ def create_crush_spread_oil_share_figure(df_ZS, df_ZL, df_ZM):
     fig.update_xaxes(zerolinecolor='#9598a1', gridcolor='#2a2e39')
 
     return fig
+
+if __name__ == "__main__":
+    # Exemplo de carregamento de dados para teste
+    df_ZS = pd.read_parquet('data/ZS_1D.parquet')
+    df_ZL = pd.read_parquet('data/ZL_1D.parquet')
+    df_ZM = pd.read_parquet('data/ZM_1D.parquet')
+    
+    fig = create_crush_spread_oil_share_figure(df_ZS, df_ZL, df_ZM)
+    fig.show()
